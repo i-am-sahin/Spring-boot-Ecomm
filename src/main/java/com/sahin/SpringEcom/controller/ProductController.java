@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -19,7 +20,17 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(){
-        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
+    }
+
+    @GetMapping("/product/{id}")
+    public  ResponseEntity<Product> getProductById(@PathVariable int id){
+
+        Product product = productService.getProductById(id);
+        if(product.getId() > 0)
+            return new ResponseEntity<>(product,HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
